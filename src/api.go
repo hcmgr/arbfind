@@ -24,10 +24,9 @@ func getArbsHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Failed to get arbs from db")
 	}
 
-	fmt.Println(arbs)
-
 	// set header
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173") // resolves cors issues
 
 	// write header and payload
 	arbsRawBytes, _ := json.Marshal(arbs)
