@@ -114,7 +114,7 @@ func (db *Database) writeSportMatches(sportKey string, matches []Match) error {
 }
 
 func (db *Database) readArbs() ([]Arb, error) {
-	cursor, err := db.sports.Find(context.TODO(), bson.M{})
+	cursor, err := db.arbs.Find(context.TODO(), bson.M{})
 	if err != nil {
 		return nil, err
 	}

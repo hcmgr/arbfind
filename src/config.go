@@ -10,6 +10,7 @@ var configFilePath string = "config.json"
 type Config struct {
 	BaseURL       string        `json:"baseURL"`
 	DefaultParams DefaultParams `json:"defaultParams"`
+	BackendPort   int           `json:"backendPort"`
 	OutputDir     string        `json:"outputDir"`
 	MongoDbUri    string        `json:"mongodbUri"`
 	ApiKeyIndex   int           `json:"apiKeyIndex"`

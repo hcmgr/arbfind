@@ -42,17 +42,14 @@ type Outcome struct {
 // Represents an arbitrage opportunity
 // i.e. sum of 1/o guaranteed to be < 1
 type Arb struct {
-	// match metadata
-	MatchId      string
-	SportKey     string
-	SportTitle   string
-	CommenceTime string
-	HomeTeam     string
-	AwayTeam     string
-
-	// arb info
-	Outcomes []*Outcome
-	R        float64
+	MatchId      string     `json:"matchid"`
+	SportKey     string     `json:"sportkey"`
+	SportTitle   string     `json:"sporttitle"`
+	CommenceTime string     `json:"commencetime"`
+	HomeTeam     string     `json:"hometeam"`
+	AwayTeam     string     `json:"awayteam"`
+	Outcomes     []*Outcome `json:"outcomes"`
+	R            float64    `json:"r"`
 }
 
 func (arb *Arb) toString() {
@@ -127,9 +124,6 @@ func findArbs() []Arb {
 		}
 	}
 
-	// write arbs to db
-	db.writeArbs(arbs)
-
 	return arbs
 }
 
@@ -151,8 +145,8 @@ func main() {
 	initConfig()
 	initDb()
 
-	arbs := findArbs()
+	// arbs := findArbs()
+	// db.writeArbs(arbs)
 
-	// arbs := getArbs()
-	showArbs(arbs)
+	startAPIServer()
 }
