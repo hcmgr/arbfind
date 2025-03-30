@@ -124,7 +124,7 @@ func buildGetSportsUrl() string {
 		panic(err)
 	}
 
-	apiKey := config.getApiKey()
+	apiKey := config.findApiKey()
 
 	// add parameters
 	q := u.Query()
@@ -251,7 +251,7 @@ func buildGetSportMatchesUrl(sportKey string) string {
 		panic(err)
 	}
 
-	apiKey := config.getApiKey()
+	apiKey := config.findApiKey()
 	regions := config.DefaultParams.Regions
 	markets := config.DefaultParams.Markets
 	oddsFormat := config.DefaultParams.OddsFormat
@@ -277,7 +277,11 @@ func postProcessMatches(matches []Match) {
 				continue
 			}
 			for oi := range bookmaker.Markets[0].Outcomes {
-				bookmaker.Markets[0].Outcomes[oi].BookmakerKey = bookmaker.BookmakerKey
+				outcome := &bookmaker.Markets[0].Outcomes[oi]
+
+				outcome.BookmakerKey = bookmaker.BookmakerKey
+				outcome.BookmakerTitle = bookmaker.BookmakerTitle
+				outcome.BookmakerUrl = config.findBookmakerUrl(bookmaker.BookmakerKey)
 			}
 		}
 	}

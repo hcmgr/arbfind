@@ -8,13 +8,14 @@ import (
 var configFilePath string = "config.json"
 
 type Config struct {
-	BaseURL       string        `json:"baseURL"`
-	DefaultParams DefaultParams `json:"defaultParams"`
-	BackendPort   int           `json:"backendPort"`
-	OutputDir     string        `json:"outputDir"`
-	MongoDbUri    string        `json:"mongodbUri"`
-	ApiKeyIndex   int           `json:"apiKeyIndex"`
-	ApiKeys       []ApiKey      `json:"apiKeys"`
+	BaseURL       string            `json:"baseURL"`
+	DefaultParams DefaultParams     `json:"defaultParams"`
+	BackendPort   int               `json:"backendPort"`
+	OutputDir     string            `json:"outputDir"`
+	MongoDbUri    string            `json:"mongodbUri"`
+	ApiKeyIndex   int               `json:"apiKeyIndex"`
+	ApiKeys       []ApiKey          `json:"apiKeys"`
+	BookmakerUrls map[string]string `json:"bookmakerUrls"`
 }
 
 type ApiKey struct {
@@ -41,6 +42,13 @@ func initConfig() {
 	}
 }
 
-func (config *Config) getApiKey() string {
+func (config *Config) findApiKey() string {
 	return config.ApiKeys[config.ApiKeyIndex].ApiKey
+}
+
+func (config *Config) findBookmakerUrl(bookmakerKey string) string {
+	if url, exists := config.BookmakerUrls[bookmakerKey]; exists {
+		return url
+	}
+	return ""
 }

@@ -25,8 +25,9 @@ type Match struct {
 }
 
 type Bookmaker struct {
-	BookmakerKey string   `json:"key"`
-	Markets      []Market `json:"markets"`
+	BookmakerKey   string   `json:"key"`
+	BookmakerTitle string   `json:"title"`
+	Markets        []Market `json:"markets"`
 }
 
 type Market struct {
@@ -34,9 +35,11 @@ type Market struct {
 }
 
 type Outcome struct {
-	BookmakerKey string  `json:"-"` // NOTE: inserted in post-processing (i.e. not read from raw json)
-	Name         string  `json:"name"`
-	Price        float64 `json:"price"`
+	BookmakerKey   string
+	BookmakerTitle string
+	BookmakerUrl   string
+	Name           string
+	Price          float64
 }
 
 // Represents an arbitrage opportunity
@@ -147,6 +150,10 @@ func main() {
 
 	// arbs := findArbs()
 	// db.writeArbs(arbs)
+
+	// arbs := getArbs()
+	// showArbs(arbs)
+	// arbs[0].toString()
 
 	startAPIServer()
 }
