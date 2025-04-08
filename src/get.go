@@ -134,7 +134,7 @@ func buildGetSportsUrl() string {
 	return u.String()
 }
 
-func getSportMatches(sportKey string) []Match {
+func getSportMatches(sportKey string, forceApiFetch bool) []Match {
 	var matches []Match
 
 	// check if match list for `sportKey` exists
@@ -143,10 +143,10 @@ func getSportMatches(sportKey string) []Match {
 	sportKeyExists := count > 0
 
 	var source int
-	if sportKeyExists {
-		source = SOURCE_DB
-	} else {
+	if !sportKeyExists || forceApiFetch {
 		source = SOURCE_API
+	} else {
+		source = SOURCE_DB
 	}
 
 	switch source {

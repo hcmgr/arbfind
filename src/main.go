@@ -121,7 +121,7 @@ func findArbs() []Arb {
 		sportKey := sport.SportKey
 
 		// get odds for this sportkey and write to db
-		matches := getSportMatches(sportKey)
+		matches := getSportMatches(sportKey, true)
 
 		for i := range matches {
 			match := &matches[i]
@@ -191,10 +191,9 @@ func main() {
 	// arbs := findArbs()
 	// db.writeArbs(arbs)
 
-	// arbs := getArbs()
-	// showArbs(arbs)
+	// dbArbs := getArbs()
+	// showArbs(dbArbs)
 	// arbs[0].toString()
-
 	// println("Hello")
 
 	startAPIServer()
