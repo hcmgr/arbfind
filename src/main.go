@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"os"
 )
 
 type Sport struct {
@@ -144,9 +146,47 @@ func showArbs(arbs []Arb) {
 	}
 }
 
+type CliArgs struct {
+	runningInDocker bool
+}
+
+func usage() string {
+	return "Usage: arb [--docker]"
+}
+
+func parseCliArgs() (CliArgs, error) {
+	var cliArgs CliArgs
+	nArgs := len(os.Args)
+
+	if nArgs > 2 {
+		return cliArgs, errors.New(usage())
+	}
+
+	switch nArgs {
+	case 1:
+		cliArgs.runningInDocker = false
+	case 2:
+		if os.Args[1] != "--docker" {
+			return cliArgs, errors.New(usage())
+		}
+		cliArgs.runningInDocker = true
+		break
+	default:
+		return cliArgs, errors.New(usage())
+	}
+
+	return cliArgs, nil
+}
+
 func main() {
-	// initConfig()
-	// initDb()
+	cliArgs, err := parseCliArgs()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	initConfig(&cliArgs)
+	initDb()
 
 	// arbs := findArbs()
 	// db.writeArbs(arbs)
@@ -155,7 +195,7 @@ func main() {
 	// showArbs(arbs)
 	// arbs[0].toString()
 
-	println("Hello")
+	// println("Hello")
 
-	// startAPIServer()
+	startAPIServer()
 }

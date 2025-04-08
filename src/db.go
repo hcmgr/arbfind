@@ -42,6 +42,8 @@ func (db *Database) connect() error {
 		return err
 	}
 
+	fmt.Println("Connected to db:", db.uri)
+
 	db.dbConn = client.Database("arb")
 
 	db.sports = db.dbConn.Collection("sports")

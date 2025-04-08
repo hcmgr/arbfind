@@ -43,7 +43,7 @@ func startAPIServer() {
 	http.HandleFunc("/getArbs", getArbsHandler)
 
 	port := config.BackendPort
-	addr := "localhost:" + strconv.Itoa(port)
+	addr := "0.0.0.0:" + strconv.Itoa(port)
 
 	fmt.Println("Starting API server at http://" + addr)
 

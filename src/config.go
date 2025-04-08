@@ -3,19 +3,26 @@ package main
 import (
 	"encoding/json"
 	"os"
+	"strconv"
 )
 
 var configFilePath string = "config.json"
 
 type Config struct {
-	BaseURL       string            `json:"baseURL"`
-	DefaultParams DefaultParams     `json:"defaultParams"`
-	BackendPort   int               `json:"backendPort"`
-	OutputDir     string            `json:"outputDir"`
-	MongoDbUri    string            `json:"mongodbUri"`
-	ApiKeyIndex   int               `json:"apiKeyIndex"`
-	ApiKeys       []ApiKey          `json:"apiKeys"`
-	BookmakerUrls map[string]string `json:"bookmakerUrls"`
+	// fields read directly from config file
+	BaseURL                string            `json:"baseURL"`
+	DefaultParams          DefaultOddsParams `json:"defaultOddsParams"`
+	BackendPort            int               `json:"backendPort"`
+	OutputDir              string            `json:"outputDir"`
+	ApiKeyIndex            int               `json:"apiKeyIndex"`
+	ApiKeys                []ApiKey          `json:"apiKeys"`
+	BookmakerUrls          map[string]string `json:"bookmakerUrls"`
+	MongodbUriPrefix       string            `json:"mongodbUriPrefix"`
+	MongodbUriPrefixDocker string            `json:"mongodbUriPrefixDocker"`
+	MongoDbPort            int               `json:"mongodbPort"`
+
+	// fields populated in post-processing
+	MongoDbUri string
 }
 
 type ApiKey struct {
@@ -23,13 +30,13 @@ type ApiKey struct {
 	ApiKey string `json:"apiKey"`
 }
 
-type DefaultParams struct {
+type DefaultOddsParams struct {
 	Regions    string `json:"regions"`
 	Markets    string `json:"markets"`
 	OddsFormat string `json:"oddsFormat"`
 }
 
-func initConfig() {
+func initConfig(cliArgs *CliArgs) {
 	data, err := os.ReadFile(configFilePath)
 	if err != nil {
 		panic(err)
@@ -40,6 +47,19 @@ func initConfig() {
 	if err != nil {
 		panic(err)
 	}
+
+	config.postProcess(cliArgs)
+}
+
+func (config *Config) postProcess(cliArgs *CliArgs) {
+	// resolve mongo db uri
+	var mongodbUriPrefix string
+	if cliArgs.runningInDocker {
+		mongodbUriPrefix = config.MongodbUriPrefixDocker
+	} else {
+		mongodbUriPrefix = config.MongodbUriPrefix
+	}
+	config.MongoDbUri = mongodbUriPrefix + ":" + strconv.Itoa(config.MongoDbPort)
 }
 
 func (config *Config) findApiKey() string {
