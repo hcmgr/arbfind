@@ -145,8 +145,8 @@ func showArbs(arbs []Arb) {
 }
 
 func main() {
-	initConfig()
-	initDb()
+	// initConfig()
+	// initDb()
 
 	// arbs := findArbs()
 	// db.writeArbs(arbs)
@@ -155,5 +155,7 @@ func main() {
 	// showArbs(arbs)
 	// arbs[0].toString()
 
-	startAPIServer()
+	println("Hello")
+
+	// startAPIServer()
 }
